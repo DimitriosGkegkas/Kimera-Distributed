@@ -1,0 +1,21 @@
+<launch>
+
+  <!-- sparkal 1 -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher_sparkal1" args="0 0 0 0 0 1 world_dummy sparkal1/map" />
+
+  <!-- sparkal 2 -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher_sparkal2" args="0 0 0 0 0 1 world_dummy sparkal2/map" />
+
+  <!-- jackal 1 -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher_jackal1" args="0 0 0 0 0 1 world_dummy acl_jackal/map" />
+
+  <!-- jackal 2 -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher_jackal2" args="0 0 0 0 0 1 world_dummy acl_jackal2/map" />
+
+  <!-- thoth -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher_thoth" args="0 0 0 0 0 1 world_dummy thoth/map" />
+
+  <!-- hathor -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher_hathor" args="0 0 0 0 0 1 world_dummy hathor/map" />
+
+</launch>

@@ -1,0 +1,14 @@
+<launch>
+	<arg name="bagfile"   default="/home/yunchang/data/kimera.bag"/>
+	<arg name="rate"      default="1.0"   />
+	<arg name="robot_name" default="robot1" />
+
+	<node pkg="rosbag" type="play" name="player_$(arg robot_name)" output="screen" 
+		args="--pause $(arg bagfile) --clock -r $(arg rate) -s0.1">
+		<remap from="/imu0" to="$(arg robot_name)/imu0" />
+		<remap from="/cam1/image_raw" to="$(arg robot_name)/cam1/image_raw" />
+		<remap from="/cam0/image_raw" to="$(arg robot_name)/cam0/image_raw" />
+
+	</node> 
+
+</launch>

@@ -28,6 +28,8 @@ namespace kimera_distributed {
 
 DistributedLoopClosureRos::DistributedLoopClosureRos(const ros::NodeHandle& n)
     : nh_(n) {
+
+      ROS_INFO_STREAM("DistributedLoopClosureRos constructor");
   DistributedLoopClosureConfig config;
   int my_id_int = -1;
   int num_robots_int = -1;
@@ -49,6 +51,8 @@ DistributedLoopClosureRos::DistributedLoopClosureRos(const ros::NodeHandle& n)
       ros::shutdown();
     }
   }
+
+  ROS_INFO_STREAM("DistributedLoopClosureRos constructor 2");
 
   // Visual place recognition params
   ros::param::get("~alpha", config.lcd_params_.alpha_);
@@ -94,17 +98,22 @@ DistributedLoopClosureRos::DistributedLoopClosureRos(const ros::NodeHandle& n)
   ros::param::get("~comm_sleep_time", config.comm_sleep_time_);
   ros::param::get("~loop_sync_sleep_time", config.loop_sync_sleep_time_);
 
+  ROS_INFO_STREAM("DistributedLoopClosureRos constructor 3");
+
   // Load robot names and initialize candidate lc queues
   for (size_t id = 0; id < config.num_robots_; id++) {
     std::string robot_name = "kimera" + std::to_string(id);
     ros::param::get("~robot" + std::to_string(id) + "_name", robot_name);
     config.robot_names_[id] = robot_name;
   }
+    ROS_INFO_STREAM("DistributedLoopClosureRos constructor 41");
 
   ros::param::get("~max_submap_size", config.submap_params_.max_submap_size);
   ros::param::get("~max_submap_distance", config.submap_params_.max_submap_distance);
-
+  ROS_INFO_STREAM("DistributedLoopClosureRos constructor 42");
   initialize(config);
+
+  ROS_INFO_STREAM("DistributedLoopClosureRos constructor 43");
 
   // Subscriber
   std::string topic = "/" + config_.robot_names_[config_.my_id_] +
@@ -126,7 +135,7 @@ DistributedLoopClosureRos::DistributedLoopClosureRos(const ros::NodeHandle& n)
       "/" + config_.robot_names_[config_.my_id_] + "/connected_peer_ids";
   connectivity_sub_ = nh_.subscribe(
       connectivity_topic, 5, &DistributedLoopClosureRos::connectivityCallback, this);
-
+  ROS_INFO_STREAM("DistributedLoopClosureRos constructor 5");
   for (size_t id = 0; id < config_.num_robots_; ++id) {
     if (id < config_.my_id_) {
       std::string vlc_req_topic =
@@ -175,6 +184,8 @@ DistributedLoopClosureRos::DistributedLoopClosureRos(const ros::NodeHandle& n)
       loop_ack_sub_.push_back(ack_sub);
     }
   }
+
+  ROS_INFO_STREAM("DistributedLoopClosureRos constructor 6");
 
   // Publisher
   std::string bow_response_topic =
@@ -785,7 +796,7 @@ bool DistributedLoopClosureRos::requestVLCFrameService(
   for (const auto& frame_msg : query.response.frames) {
     lcd::VLCFrame frame;
     kimera_multi_lcd::VLCFrameFromMsg(frame_msg, &frame);
-    assert(frame.robot_id_ == my_id_);
+    assert(frame.robot_id_ == config_.my_id_);
     lcd::RobotPoseId vertex_id(frame.robot_id_, frame.pose_id_);
     {  // start lcd critical section
       std::unique_lock<std::mutex> lcd_lock(lcd_mutex_);

@@ -55,22 +55,29 @@ void DistributedLoopClosure::initialize(const DistributedLoopClosureConfig& conf
   config_ = config;
   num_loops_with_robot_.assign(config_.num_robots_, 0);
 
+  ROS_INFO("Initializing Distributed 1");
+
   // Used for logging
   received_bow_bytes_.clear();
   received_vlc_bytes_.clear();
+  ROS_INFO("Initializing Distributed 2");
+
 
   // Load robot names and initialize candidate lc queues
+  ROS_INFO("Height Info: [%d]", candidate_lc_.size());
   for (size_t id = 0; id < config_.num_robots_; id++) {
+    ROS_INFO("Initializing Distributed 20");
     candidate_lc_[id] = std::vector<lcd::PotentialVLCEdge>{};
     loop_pub_initialized_[id] = false;
   }
-
+    ROS_INFO("Initializing Distributed 21");
   // Initialize LCD
   lcd_->loadAndInitialize(config_.lcd_params_);
+    ROS_INFO("Initializing Distributed 22");
 
   // Initialize submap atlas
   submap_atlas_.reset(new SubmapAtlas(config_.submap_params_));
-
+  ROS_INFO("Initializing Distributed 3");
   if (config_.run_offline_) {
     // Load odometry
     loadOdometryFromFile(config_.offline_dir_ + "odometry_poses.csv");
@@ -83,6 +90,7 @@ void DistributedLoopClosure::initialize(const DistributedLoopClosureConfig& conf
       createLogFiles();
     }
   }
+    ROS_INFO("Initializing Distributed 5");
 
   // Initially assume all robots are connected
   for (size_t robot_id = 0; robot_id < config_.num_robots_; ++robot_id) {
